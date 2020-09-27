@@ -7,6 +7,7 @@ Dim summaryrow As Integer
 Dim openval As Double
 Dim closeval As Double
 Dim yrchange As Double
+'Total Stock Volume is far too large for long
 Dim tsv As Double
 
 
@@ -23,43 +24,51 @@ Cells(1, 10).Value = "Yearly Change"
 Cells(1, 11).Value = "Percent Change"
 Cells(1, 12).Value = "Total Stock Volume"
 
+'Summary row iterates every time there is a new ticker value
 summaryrow = 2
 tsv = 0
+
+'It turns out you can't re-size an array that was initialized with a length
 ReDim Preserve tickers(0)
 
 length = UBound(tickers, 1) - LBound(tickers, 1) + 1
 
 For i = 2 To finalrow
+
+    'If statement that sets up each array with the correct values initially
     If i = 2 Then
         tickers(0) = Cells(i, 1)
         openval = Cells(i, 3).Value
     End If
-    
-    
+
+    'If statement that runs when we reach the end of a ticker value
     If Cells(i, 1).Value <> tickers(length - 1) Then
         closeval = Cells(i - 1, 6).Value
         yrchange = closeval - openval
-        
+
         'Populate summary row
         Cells(summaryrow, 9).Value = tickers(length - 1)
         Cells(summaryrow, 10).Value = yrchange
         Cells(summaryrow, 11).Value = Abs(yrchange) / openval
         Cells(summaryrow, 12).Value = tsv
-    
-    
-    
+
+
+
         'Iterate things for the next ticker value
-        tsv = 0
+        'tsv is given the value of the first row for the new ticker value
+        tsv = Cells(i, 7).Value
         openval = Cells(i, 3).Value
         ReDim Preserve tickers(length)
         summaryrow = summaryrow + 1
-        
-        
+
+        'Update the length of the array and then add the next ticker value in it
+        'This prevents an infinite loop caused by placing the new ticker in tickers(0), not that I would know...
         length = UBound(tickers, 1) - LBound(tickers, 1) + 1
         tickers(length - 1) = Cells(i, 1).Value
-    
-    
+
+
     Else
+        'If a new ticker hasn't been reached yet keep adding to total stock volume
         tsv = tsv + Cells(i, 7).Value
         
     End If
