@@ -7,8 +7,11 @@ Dim summaryrow As Integer
 Dim openval As Double
 Dim closeval As Double
 Dim yrchange As Double
+Dim colorset As Integer
 'Total Stock Volume is far too large for long
 Dim tsv As Double
+
+
 
 
 
@@ -18,11 +21,13 @@ Dim tsv As Double
 finalrow = Cells(Rows.Count, 1).End(xlUp).Row
 
 
-'Set up the summary table
+'Set up the summary table and autofits to ensure you can read the titles
 Cells(1, 9).Value = "Ticker"
 Cells(1, 10).Value = "Yearly Change"
 Cells(1, 11).Value = "Percent Change"
 Cells(1, 12).Value = "Total Stock Volume"
+Range("I1:L1").Columns.AutoFit
+
 
 'Summary row iterates every time there is a new ticker value
 summaryrow = 2
@@ -46,10 +51,24 @@ For i = 2 To finalrow
         closeval = Cells(i - 1, 6).Value
         yrchange = closeval - openval
 
+        If yrchange > 0 Then
+            colorset = 4
+
+        'This seems unlikely but just in case
+        ElseIf yrchange = 0 Then
+            colorset = 6
+        Else
+            colorset = 3
+        End If
+
+
         'Populate summary row
         Cells(summaryrow, 9).Value = tickers(length - 1)
         Cells(summaryrow, 10).Value = yrchange
+        Cells(summaryrow, 10).Interior.ColorIndex = colorset
         Cells(summaryrow, 11).Value = Abs(yrchange) / openval
+        'Format that cell as a percentage
+        Range("K" & summaryrow).NumberFormat = "0.00%"
         Cells(summaryrow, 12).Value = tsv
 
 
@@ -70,20 +89,13 @@ For i = 2 To finalrow
     Else
         'If a new ticker hasn't been reached yet keep adding to total stock volume
         tsv = tsv + Cells(i, 7).Value
-        
+
     End If
-    
+
 
 
 
 Next i
-
-
-
-
-
-
-
 
 
 
