@@ -10,11 +10,20 @@ Dim yrchange As Double
 Dim colorset As Integer
 'Total Stock Volume is far too large for long
 Dim tsv As Double
+Dim sheetsnum As Integer
 
 
 
 
+sheetsnum = Sheets.Count
 
+
+
+For q = 1 To sheetsnum
+    Sheets(q).Activate
+    MsgBox (ActiveSheet.Index)
+
+Next q
 
 
 ' Find the final row number
@@ -66,7 +75,12 @@ For i = 2 To finalrow
         Cells(summaryrow, 9).Value = tickers(length - 1)
         Cells(summaryrow, 10).Value = yrchange
         Cells(summaryrow, 10).Interior.ColorIndex = colorset
-        Cells(summaryrow, 11).Value = Abs(yrchange) / openval
+        If openval <> 0 Then
+            Cells(summaryrow, 11).Value = Abs(yrchange) / openval
+        Else
+            Cells(summaryrow, 11).Value = 0
+
+        End If
         'Format that cell as a percentage
         Range("K" & summaryrow).NumberFormat = "0.00%"
         Cells(summaryrow, 12).Value = tsv
