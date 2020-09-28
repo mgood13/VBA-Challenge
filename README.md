@@ -17,3 +17,6 @@ This table contains
 - Greatest Total Volume
 
 As before it calculates this table for each of the sheets.
+
+Finally, the code creates a "Summary Sheet" which allows visualization of the "Greatest Table"
+for all sheets simultaneously.
