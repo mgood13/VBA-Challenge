@@ -35,18 +35,23 @@ Dim percentchange As Double
 Dim greatest(2) As String
 
 
+'If you run the code multiple times this turns off the warning message
+'that pops up when deleting the first sheet
+Application.DisplayAlerts = False
 
 
 
 
+
+If Sheets(1).Name = "Summary Sheet" Then
+    Sheets("Summary Sheet").Delete
+End If
 
 
 
 'Obtain number of sheets for the current workbook
 
 sheetsnum = Sheets.Count
-
-
 
 
 
@@ -288,6 +293,33 @@ Next q
 'Reactivate the first sheet in the Workbook
 
 Sheets(1).Activate
+
+'Create the new summary Sheet
+Sheets.Add Before:=Sheets(1)
+Sheets(1).Activate
+ActiveSheet.Name = "Summary Sheet"
+
+
+For j = 1 To sheetsnum
+    If j = 1 Then
+        Cells(1, 1).Value = Sheets(j + 1).Name
+        Range("A1:A1").Font.Bold = True
+        Sheets(j + 1).Range("N1:P4").Copy Range("A2:C5")
+
+    Else
+        Cells(((j - 1) * 6) + 1, 1).Value = Sheets(j + 1).Name
+        Range("A" & ((j - 1) * 6) + 1 & ":A" & ((j - 1) * 6) + 1 & "").Font.Bold = True
+        Sheets(j + 1).Range("N1:P4").Copy Range("A" & (j - 1) * 6 + 2 & ":C" & (j - 1) * 6 + 2 & "")
+
+     End If
+
+
+Next j
+
+Range("A1:C" & sheetsnum * 6 & "").Columns.AutoFit
+
+
+
 
 
 
