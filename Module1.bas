@@ -294,11 +294,17 @@ Next q
 
 Sheets(1).Activate
 
-'Create the new summary Sheet
+'Create the new summary Sheet before the first sheet of data
 Sheets.Add Before:=Sheets(1)
 Sheets(1).Activate
+
+'Name the sheet Summary sheet
 ActiveSheet.Name = "Summary Sheet"
 
+'Loop through each sheet of data
+'Place the name of the sheet into the given cell in the summary sheet
+'Place the "Greatest Table" from each page below its sheetname title
+'Bold each of the sheet names just for fun
 
 For j = 1 To sheetsnum
     If j = 1 Then
@@ -315,6 +321,9 @@ For j = 1 To sheetsnum
 
 
 Next j
+
+'Autofit the columns to make sure that the data is visible
+'Don't make the user click things like a barbarian
 
 Range("A1:C" & sheetsnum * 6 & "").Columns.AutoFit
 
