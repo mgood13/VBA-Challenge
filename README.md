@@ -2,8 +2,8 @@
 VBA Homework
 
 This code is intended to be run with the formatted stock exchange data in the two given excel spreadsheets.
-It cycles through all of the data in a given sheet and parses out:
-- The tag
+It cycles through all of the data in a given sheet and parses out for each unique tag:
+- The tag name
 - The yearly change (colored according to whether positive or negative)
 - The Percent Change
 - The Total Stock Volume Traded
